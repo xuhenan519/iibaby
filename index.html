@@ -268,52 +268,89 @@
             50% { transform: translateY(-20px); }
         }
 
-        /* ===== 产品功能 ===== */
+        /* ===== 六大核心功能 ===== */
         .features {
             background: white;
         }
 
         .features-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
             gap: 30px;
         }
 
         .feature-card {
             background: var(--card-bg);
             border-radius: var(--radius);
-            padding: 40px 30px;
-            text-align: center;
+            padding: 35px 30px;
             box-shadow: var(--shadow);
             transition: all 0.3s ease;
             border-top: 5px solid transparent;
+            position: relative;
+            min-height: 320px;
         }
 
         .feature-card:hover {
-            transform: translateY(-10px);
+            transform: translateY(-8px);
             border-top-color: var(--primary-pink);
         }
 
         .feature-icon {
-            width: 80px;
-            height: 80px;
+            width: 70px;
+            height: 70px;
             background: var(--pink-light);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin: 0 auto 25px;
+            margin-bottom: 25px;
         }
 
         .feature-icon i {
-            font-size: 2.5rem;
+            font-size: 2.2rem;
             color: var(--pink-deep);
         }
 
         .feature-card h3 {
             font-size: 1.5rem;
             margin-bottom: 15px;
-            color: var(--text-dark);
+            color: var(--pink-deep);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .feature-card h3 .feature-number {
+            background: var(--pink-gradient);
+            color: white;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .process-flow {
+            margin-top: 15px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            color: var(--text-light);
+            border-left: 3px solid var(--tech-blue);
+        }
+
+        .feature-example {
+            margin-top: 15px;
+            padding: 12px 15px;
+            background: #f0f7ff;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            color: #2c5282;
+            border: 1px dashed #6EC1E4;
         }
 
         /* ===== 8大需求展示 ===== */
@@ -716,6 +753,10 @@
             .architecture-diagram {
                 flex-direction: column;
             }
+            
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
         }
 
         @media (max-width: 768px) {
@@ -772,7 +813,7 @@
                 
                 <div class="nav-links">
                     <a href="#home">首页</a>
-                    <a href="#features">产品功能</a>
+                    <a href="#features">核心功能</a>
                     <a href="#needs">8大需求</a>
                     <a href="#tech-demo">技术体验</a>
                     <a href="#core-tech">核心技术</a>
@@ -804,8 +845,8 @@
                             <span class="stat-label">大需求分类</span>
                         </div>
                         <div class="stat-item">
-                            <span class="stat-number">10000+</span>
-                            <span class="stat-label">标注样本</span>
+                            <span class="stat-number">&lt;0.5s</span>
+                            <span class="stat-label">实时响应</span>
                         </div>
                     </div>
                 </div>
@@ -819,45 +860,89 @@
         </div>
     </section>
 
-    <!-- 产品功能 -->
+    <!-- 六大核心功能 -->
     <section class="features" id="features">
         <div class="container">
             <div class="section-title">
-                <h2>核心功能</h2>
-                <p>全方位守护宝宝健康成长</p>
+                <h2>六大核心功能</h2>
+                <p>全方位智能育儿解决方案</p>
             </div>
             
             <div class="features-grid">
                 <div class="feature-card">
                     <div class="feature-icon">
-                        <i class="fas fa-microphone-alt"></i>
+                        <i class="fas fa-language"></i>
                     </div>
-                    <h3>智能哭声识别</h3>
-                    <p>实时分析哭声特征，秒级识别宝宝需求，准确率高达95%以上</p>
+                    <h3><span class="feature-number">一</span> AI智能哭声翻译系统</h3>
+                    <p>基于多模态哭声识别算法与深度学习模型，实时分析音频特征、情绪强度与生理信号，精准判断宝宝需求，并通过决策系统推送安抚建议。</p>
+                    <div class="process-flow">
+                        <strong>AI决策流程：</strong>哭声采集 → 特征提取 → 情境建模 → 需求判断 → 安抚策略匹配 → 推送执行
+                    </div>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h3><span class="feature-number">二</span> 全天候智能监测与预警</h3>
+                    <p>AI视觉与行为分析引擎持续捕捉宝宝动作、表情与环境变化，结合决策系统识别异常状态，及时向家长推送分级预警。</p>
+                    <div class="feature-example">
+                        <strong>智能提醒示例：</strong><br>
+                        宝宝持续哭闹超过3分钟，建议查看并安抚<br>
+                        监测到翻身动作，注意防护
+                    </div>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-vector-square"></i>
+                    </div>
+                    <h3><span class="feature-number">三</span> 虚拟AR安全围栏（AI增强版）</h3>
+                    <p>AI决策系统动态学习宝宝活动轨迹，可智能推荐安全区域范围，并在越界前预判风险，实现从"被动提醒"到"主动防护"的升级。</p>
+                    <div class="feature-example">
+                        <strong>AI增强特性：</strong><br>
+                        学习宝宝活动习惯，智能调整围栏敏感度<br>
+                        结合动作预测，提前推送提醒
+                    </div>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-hands-helping"></i>
+                    </div>
+                    <h3><span class="feature-number">四</span> 智能互动与安抚策略库</h3>
+                    <p>基于宝宝历史行为与实时状态，AI决策系统从音乐、故事、语音安抚等内容库中智能推荐最佳方案，并通过双向语音系统自动或半自动执行。</p>
+                    <div class="feature-example">
+                        <strong>智能安抚场景：</strong><br>
+                        识别困倦信号 → 自动播放白噪音<br>
+                        检测分离焦虑 → 播放妈妈预录语音
+                    </div>
                 </div>
                 
                 <div class="feature-card">
                     <div class="feature-icon">
                         <i class="fas fa-chart-line"></i>
                     </div>
-                    <h3>成长数据追踪</h3>
-                    <p>记录哭闹频率、时长与模式，生成可视化成长健康报告</p>
-                </div>
-                
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <i class="fas fa-hand-holding-heart"></i>
+                    <h3><span class="feature-number">五</span> 成长数据智能分析与报告</h3>
+                    <p>AI系统整合哭声、睡眠、活动等多维度数据，通过时序分析与健康模型，生成个性化成长报告，并提供喂养、作息等结构化建议。</p>
+                    <div class="feature-example">
+                        <strong>AI分析输出：</strong><br>
+                        睡眠质量评估与改善建议<br>
+                        哭闹模式关联分析（如与饮食、环境相关）
                     </div>
-                    <h3>个性化安抚建议</h3>
-                    <p>基于宝宝状态智能推荐安抚方案，提供专业育儿指导</p>
                 </div>
                 
                 <div class="feature-card">
                     <div class="feature-icon">
                         <i class="fas fa-users"></i>
                     </div>
-                    <h3>家庭共享</h3>
-                    <p>支持多成员同时查看，确保家人育儿标准一致</p>
+                    <h3><span class="feature-number">六</span> 家庭协同看护与智能任务分配</h3>
+                    <p>AI系统根据家庭成员看护记录、地理位置与时间偏好，智能分配看护任务、同步状态提醒，并统一安抚策略执行标准，实现智能协同育儿。</p>
+                    <div class="feature-example">
+                        <strong>协同智能功能：</strong><br>
+                        看护任务自动排班与提醒<br>
+                        安抚记录全家共享与策略优化
+                    </div>
                 </div>
             </div>
         </div>
@@ -894,11 +979,11 @@
                 
                 <div class="need-item">
                     <div class="need-icon">
-                        <i class="fas fa-tint"></i>
+                        <i class="fas fa-shield-heart"></i>
                     </div>
                     <div class="need-content">
-                        <h4>尿布不适</h4>
-                        <p>识别不适烦躁哭声</p>
+                        <h4>恐惧不安</h4>
+                        <p>识别因惊吓、陌生环境引发的焦虑哭声</p>
                     </div>
                 </div>
                 
@@ -1036,12 +1121,12 @@
             <div class="tech-stack">
                 <div class="tech-card">
                     <h3><i class="fas fa-brain"></i> AI哭声语义识别</h3>
-                    <p>基于超10000条标注样本训练的深度学习模型，精准分辨饥饿、疼痛等8类宝宝需求，识别准确率达95%以上。</p>
+                    <p>基于超10000条标注样本训练的深度学习模型，精准分辨8类宝宝需求，识别准确率达95%以上，响应时间&lt;0.5秒。</p>
                     <ul class="tech-features">
                         <li><i class="fas fa-check"></i> 超10000条专业标注样本训练</li>
                         <li><i class="fas fa-check"></i> 95%以上识别准确率</li>
                         <li><i class="fas fa-check"></i> 8类核心需求精准分类</li>
-                        <li><i class="fas fa-check"></i> 实时响应，＜2秒完成分析</li>
+                        <li><i class="fas fa-check"></i> 实时响应，&lt;0.5秒完成分析</li>
                     </ul>
                 </div>
                 
@@ -1121,7 +1206,7 @@
                 <div>
                     <h3>产品</h3>
                     <div class="footer-links">
-                        <a href="#features">功能特点</a>
+                        <a href="#features">核心功能</a>
                         <a href="#core-tech">技术原理</a>
                         <a href="#tech-demo">技术体验</a>
                         <a href="#">使用指南</a>
@@ -1195,55 +1280,55 @@
             });
         });
         
-        // 8种情绪的数据配置
+        // 8种情绪的数据配置（基于8大需求）
         const emotionData = [
             {
-                emotion: "饥饿",
+                emotion: "饥饿需求",
                 confidence: 92,
-                features: "哭声短促有力，呈波浪式上升，伴有吮吸动作或手指放入口中",
-                advice: "建议：立即喂奶，检查上次喂奶时间。喂奶前可先安抚，避免宝宝因饥饿过度而呛奶。"
+                features: "哭声短促有力，呈波浪式上升，伴有吮吸动作或手指放入口中，声谱图显示高频集中",
+                advice: "建议：检查上次喂奶时间，立即准备喂奶。喂奶前先安抚宝宝，避免因饥饿过度而呛奶。"
             },
             {
-                emotion: "困倦",
+                emotion: "困倦疲劳",
                 confidence: 88,
-                features: "哭声呈鸣咽状，音调较低，节奏缓慢，可能伴随揉眼睛、打哈欠",
+                features: "哭声呈鸣咽状，音调较低，节奏缓慢，可能伴随揉眼睛、打哈欠，眼睛半闭状态",
                 advice: "建议：营造安静、昏暗的睡眠环境，轻柔安抚，可尝试摇篮曲或白噪音辅助入眠。"
             },
             {
-                emotion: "不适",
+                emotion: "恐惧不安",
                 confidence: 85,
-                features: "哭声尖锐刺耳，时断时续，身体扭动不安，可能因尿布湿或衣物不适",
-                advice: "建议：检查尿布是否干燥，衣物是否过紧或标签摩擦。保持环境舒适温度22-26℃。"
+                features: "哭声突然爆发，音调高亢颤抖，伴有惊跳反射，可能因陌生环境或突然声响引发",
+                advice: "建议：立即拥抱安抚，轻声细语，提供安全感。避免突然的噪音和强光刺激。"
             },
             {
-                emotion: "胀气",
+                emotion: "胀气腹痛",
                 confidence: 90,
-                features: "哭声突然而尖锐，双腿向上蜷缩，腹部紧张，可能在喂奶后发生",
+                features: "哭声尖锐持久，双腿向上蜷缩，腹部紧张，可能在喂奶后发生，伴有排气困难",
                 advice: "建议：竖抱轻拍背部帮助打嗝，顺时针按摩腹部，可尝试飞机抱缓解不适。"
+            },
+            {
+                emotion: "温度不适",
+                confidence: 82,
+                features: "哭声烦躁不安，皮肤潮红或发凉，呼吸变化，手脚温度异常，寻求舒适姿势",
+                advice: "建议：检查环境温度，调整衣物厚度。理想室温22-24℃，避免过热或过冷。"
             },
             {
                 emotion: "需要关注",
                 confidence: 78,
-                features: "哭声轻柔带有试探性，时哭时停，会观察周围是否有人回应",
-                advice: "建议：给予适当关注和拥抱，但避免过度响应以免形成依赖。可进行亲子互动游戏。"
+                features: "哭声轻柔带有试探性，时哭时停，会观察周围是否有人回应，眼神寻找",
+                advice: "建议：给予适当关注和拥抱，进行亲子互动游戏，但避免过度响应以免形成依赖。"
             },
             {
-                emotion: "疼痛",
-                confidence: 95,
-                features: "哭声尖锐持久，音调高亢，伴有痛苦表情，身体僵硬或颤抖",
-                advice: "建议：立即检查有无受伤或异常，测量体温，必要时就医。出牙期可使用牙胶缓解。"
-            },
-            {
-                emotion: "过热",
-                confidence: 82,
-                features: "哭声烦躁不安，皮肤潮红出汗，呼吸稍快，手脚温热",
-                advice: "建议：减少衣物包裹，调整室温至22-24℃，保持通风，避免阳光直射。"
-            },
-            {
-                emotion: "惊吓",
+                emotion: "出牙疼痛",
                 confidence: 87,
-                features: "哭声突然爆发，音调极高，伴有惊跳反射，可能因突然声响或光线",
-                advice: "建议：立即拥抱安抚，轻声细语，提供安全感。避免突然的噪音和强光刺激。"
+                features: "哭声尖锐断续，流口水增多，牙龈红肿，喜欢咬东西，可能伴有轻微发热",
+                advice: "建议：提供干净牙胶或冷敷牙龈，按摩牙龈缓解不适，必要时咨询儿科医生。"
+            },
+            {
+                emotion: "生病不适",
+                confidence: 91,
+                features: "哭声异常虚弱或尖锐，伴有异常体温、食欲不振、精神萎靡或其他异常症状",
+                advice: "建议：立即测量体温，观察其他症状。如持续异常，及时就医检查。"
             }
         ];
         
@@ -1259,7 +1344,7 @@
         recordBtn.addEventListener('click', function() {
             // 开始录制状态
             recordBtn.classList.add('recording');
-            recordBtn.innerHTML = '<i class="fas fa-circle"></i> 正在分析中...';
+            recordBtn.innerHTML = '<i class="fas fa-circle"></i> AI分析中...';
             recordBtn.disabled = true;
             
             // 随机选择一种情绪
