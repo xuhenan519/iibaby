@@ -3,70 +3,1209 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>智能婴儿监护仪 | iiBaby 翻译官</title>
-    <link rel="stylesheet" href="style.css">
+    <title>iibaby - AI宝宝哭声识别与育儿辅助系统</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* ===== 全局样式与变量 ===== */
+        :root {
+            --primary-pink: #FF9EB5;       /* 主粉色 */
+            --pink-light: #FFE4EC;         /* 浅粉色 */
+            --pink-deep: #E75480;          /* 深粉色 */
+            --pink-gradient: linear-gradient(135deg, #FF9EB5 0%, #FFC2D1 100%);
+            --tech-blue: #6EC1E4;          /* 科技蓝点缀 */
+            --text-dark: #5A4A4F;          /* 主文字色 */
+            --text-light: #87787C;         /* 次要文字色 */
+            --card-bg: rgba(255, 255, 255, 0.95);
+            --shadow: 0 10px 30px rgba(255, 158, 181, 0.15);
+            --radius: 20px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', 'Microsoft YaHei', 'PingFang SC', sans-serif;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background-color: #FFF9FA;
+            color: var(--text-dark);
+            line-height: 1.7;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        section {
+            padding: 80px 0;
+        }
+
+        h1, h2, h3 {
+            font-weight: 700;
+            line-height: 1.3;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 60px;
+            position: relative;
+        }
+
+        .section-title h2 {
+            font-size: 2.5rem;
+            color: var(--pink-deep);
+            display: inline-block;
+            padding-bottom: 15px;
+        }
+
+        .section-title h2::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background: var(--pink-gradient);
+            border-radius: 2px;
+        }
+
+        .btn {
+            display: inline-block;
+            background: var(--pink-gradient);
+            color: white;
+            padding: 14px 32px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1rem;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 6px 20px rgba(255, 158, 181, 0.3);
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(255, 158, 181, 0.4);
+        }
+
+        /* ===== 顶部导航 ===== */
+        header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            box-shadow: 0 5px 20px rgba(255, 158, 181, 0.1);
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--pink-deep);
+            text-decoration: none;
+        }
+
+        .logo i {
+            color: var(--primary-pink);
+            font-size: 2rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 40px;
+        }
+
+        .nav-links a {
+            color: var(--text-dark);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.05rem;
+            transition: color 0.3s;
+            position: relative;
+        }
+
+        .nav-links a:hover {
+            color: var(--pink-deep);
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--pink-deep);
+            transition: width 0.3s;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .mobile-menu {
+            display: none;
+            font-size: 1.5rem;
+            color: var(--pink-deep);
+            cursor: pointer;
+        }
+
+        /* ===== 英雄区域 ===== */
+        .hero {
+            padding-top: 160px;
+            padding-bottom: 100px;
+            background: linear-gradient(135deg, #FFF9FA 0%, #FFEFF2 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -100px;
+            right: -100px;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(255, 158, 181, 0.1) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+
+        .hero-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+        }
+
+        .hero-text h1 {
+            font-size: 3.2rem;
+            color: var(--pink-deep);
+            margin-bottom: 20px;
+            line-height: 1.2;
+        }
+
+        .hero-text h1 span {
+            background: var(--pink-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-text p {
+            font-size: 1.2rem;
+            color: var(--text-light);
+            margin-bottom: 30px;
+            max-width: 90%;
+        }
+
+        .hero-stats {
+            display: flex;
+            gap: 40px;
+            margin-top: 40px;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--pink-deep);
+            display: block;
+        }
+
+        .stat-label {
+            font-size: 1rem;
+            color: var(--text-light);
+        }
+
+        .hero-visual {
+            position: relative;
+        }
+
+        .baby-icon {
+            width: 300px;
+            height: 300px;
+            background: var(--pink-gradient);
+            border-radius: 50%;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .baby-icon i {
+            font-size: 8rem;
+            color: white;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        /* ===== 产品功能 ===== */
+        .features {
+            background: white;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+        }
+
+        .feature-card {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            padding: 40px 30px;
+            text-align: center;
+            box-shadow: var(--shadow);
+            transition: all 0.3s ease;
+            border-top: 5px solid transparent;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            border-top-color: var(--primary-pink);
+        }
+
+        .feature-icon {
+            width: 80px;
+            height: 80px;
+            background: var(--pink-light);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 25px;
+        }
+
+        .feature-icon i {
+            font-size: 2.5rem;
+            color: var(--pink-deep);
+        }
+
+        .feature-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            color: var(--text-dark);
+        }
+
+        /* ===== 8大需求展示 ===== */
+        .needs-section {
+            background: var(--pink-light);
+        }
+
+        .needs-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+        }
+
+        .need-item {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            box-shadow: var(--shadow);
+            transition: transform 0.3s;
+        }
+
+        .need-item:hover {
+            transform: translateX(10px);
+        }
+
+        .need-icon {
+            width: 60px;
+            height: 60px;
+            background: var(--pink-light);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .need-icon i {
+            font-size: 1.8rem;
+            color: var(--pink-deep);
+        }
+
+        .need-content h4 {
+            color: var(--pink-deep);
+            margin-bottom: 5px;
+        }
+
+        /* ===== 技术体验模块 ===== */
+        .tech-demo-section {
+            background: white;
+        }
+
+        .tech-demo-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            padding: 50px;
+            box-shadow: var(--shadow);
+            text-align: center;
+        }
+
+        .demo-title {
+            color: var(--pink-deep);
+            font-size: 2rem;
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .demo-title i {
+            font-size: 2.2rem;
+        }
+
+        .demo-subtitle {
+            color: var(--text-light);
+            margin-bottom: 40px;
+            font-size: 1.1rem;
+        }
+
+        .record-btn {
+            background: var(--pink-gradient);
+            color: white;
+            border: none;
+            padding: 18px 50px;
+            font-size: 1.3rem;
+            border-radius: 50px;
+            cursor: pointer;
+            margin: 30px 0;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            margin: 30px auto;
+        }
+
+        .record-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 25px rgba(255, 158, 181, 0.4);
+        }
+
+        .record-btn.recording {
+            background: linear-gradient(135deg, #FF6B6B 0%, #FF8E8E 100%);
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .demo-result {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 40px;
+            margin-top: 40px;
+            text-align: left;
+            border-left: 5px solid var(--tech-blue);
+            display: none;
+        }
+
+        .result-header {
+            color: var(--pink-deep);
+            font-size: 1.8rem;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .result-item {
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .result-label {
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .result-label i {
+            color: var(--tech-blue);
+        }
+
+        .result-value {
+            color: var(--text-light);
+            line-height: 1.6;
+        }
+
+        .confidence-bar {
+            height: 10px;
+            background: #e9ecef;
+            border-radius: 5px;
+            margin-top: 10px;
+            overflow: hidden;
+        }
+
+        .confidence-fill {
+            height: 100%;
+            background: var(--pink-gradient);
+            border-radius: 5px;
+            width: 0%;
+            transition: width 2s ease-in-out;
+        }
+
+        /* ===== 核心技术展示 ===== */
+        .core-tech {
+            background: linear-gradient(135deg, #f8f9fa 0%, #f1f3f5 100%);
+        }
+
+        .tech-stack {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 40px;
+            margin-top: 50px;
+        }
+
+        .tech-card {
+            background: white;
+            border-radius: var(--radius);
+            padding: 40px 35px;
+            box-shadow: var(--shadow);
+            border-top: 5px solid var(--tech-blue);
+            transition: transform 0.3s;
+        }
+
+        .tech-card:hover {
+            transform: translateY(-10px);
+        }
+
+        .tech-card h3 {
+            color: var(--tech-blue);
+            font-size: 1.8rem;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .tech-card h3 i {
+            font-size: 2rem;
+        }
+
+        .tech-features {
+            list-style: none;
+            margin-top: 20px;
+        }
+
+        .tech-features li {
+            padding: 12px 0;
+            border-bottom: 1px solid #f1f3f5;
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+        }
+
+        .tech-features li:last-child {
+            border-bottom: none;
+        }
+
+        .tech-features li i {
+            color: var(--pink-deep);
+            margin-top: 5px;
+            flex-shrink: 0;
+        }
+
+        .tech-architecture {
+            background: white;
+            border-radius: var(--radius);
+            padding: 40px;
+            margin-top: 50px;
+            box-shadow: var(--shadow);
+        }
+
+        .architecture-diagram {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 30px;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .arch-step {
+            text-align: center;
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .arch-icon {
+            width: 80px;
+            height: 80px;
+            background: var(--pink-light);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+        }
+
+        .arch-icon i {
+            font-size: 2.5rem;
+            color: var(--pink-deep);
+        }
+
+        /* ===== CTA区域 ===== */
+        .cta-section {
+            background: var(--pink-gradient);
+            color: white;
+            text-align: center;
+            padding: 100px 0;
+            border-radius: 0 0 50px 50px;
+        }
+
+        .cta-section h2 {
+            font-size: 2.8rem;
+            margin-bottom: 20px;
+        }
+
+        .cta-section p {
+            font-size: 1.2rem;
+            margin-bottom: 40px;
+            opacity: 0.9;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .cta-btn {
+            background: white;
+            color: var(--pink-deep);
+            padding: 16px 45px;
+            font-size: 1.2rem;
+        }
+
+        /* ===== 页脚 ===== */
+        footer {
+            background: #5A4A4F;
+            color: white;
+            padding: 60px 0 30px;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .footer-logo {
+            font-size: 2rem;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .footer-column h3 {
+            color: var(--primary-pink);
+            margin-bottom: 25px;
+            font-size: 1.3rem;
+        }
+
+        .footer-links a {
+            color: #ddd;
+            text-decoration: none;
+            display: block;
+            margin-bottom: 12px;
+            transition: color 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: var(--primary-pink);
+        }
+
+        .copyright {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: #aaa;
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        .disclaimer {
+            font-size: 0.85rem;
+            color: #bbb;
+            margin-top: 15px;
+            font-style: italic;
+        }
+
+        /* ===== 响应式设计 ===== */
+        @media (max-width: 992px) {
+            .hero-content {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+            
+            .hero-text p {
+                max-width: 100%;
+            }
+            
+            .tech-stack {
+                grid-template-columns: 1fr;
+            }
+            
+            .hero h1 {
+                font-size: 2.8rem;
+            }
+            
+            .architecture-diagram {
+                flex-direction: column;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .mobile-menu {
+                display: block;
+            }
+            
+            .hero h1 {
+                font-size: 2.3rem;
+            }
+            
+            section {
+                padding: 60px 0;
+            }
+            
+            .section-title h2 {
+                font-size: 2rem;
+            }
+            
+            .hero-stats {
+                flex-direction: column;
+                gap: 25px;
+            }
+            
+            .tech-demo-container {
+                padding: 30px 20px;
+            }
+            
+            .demo-title {
+                font-size: 1.7rem;
+            }
+        }
+    </style>
 </head>
 <body>
+    <!-- 顶部导航 -->
     <header>
-        <h1>婴语翻译官 iiBaby Translator</h1>
-        <p class="tagline">AI听懂宝宝每一声啼哭 · 多模态守护健康成长</p>
+        <div class="container">
+            <nav>
+                <a href="#" class="logo">
+                    <i class="fas fa-baby"></i>
+                    iibaby
+                </a>
+                
+                <div class="nav-links">
+                    <a href="#home">首页</a>
+                    <a href="#features">产品功能</a>
+                    <a href="#needs">8大需求</a>
+                    <a href="#tech-demo">技术体验</a>
+                    <a href="#core-tech">核心技术</a>
+                </div>
+                
+                <div class="mobile-menu">
+                    <i class="fas fa-bars"></i>
+                </div>
+            </nav>
+        </div>
     </header>
 
-    <main>
-        <section class="hero">
-            <div class="hero-text">
-                <h2>告别猜测，科学育儿</h2>
-                <p>我们采用独创的<b>循环卷积混合模型 (R-CNN)</b>与<b>多模态传感器融合</b>技术，将婴儿哭声精准翻译为8大类需求与情绪。</p>
-                <button id="techDetailBtn">了解核心技术</button>
+    <!-- 英雄区域 -->
+    <section class="hero" id="home">
+        <div class="container">
+            <div class="hero-content">
+                <div class="hero-text">
+                    <h1>听懂宝宝的<span>第一句话</span></h1>
+                    <p>基于AI多模态感知技术，精准识别婴儿8大核心需求。告别猜测，让科学育儿触手可及。专为0-18个月宝宝设计，您的智能育儿伙伴。</p>
+                    <a href="#tech-demo" class="btn">体验AI哭声分析</a>
+                    
+                    <div class="hero-stats">
+                        <div class="stat-item">
+                            <span class="stat-number">95%</span>
+                            <span class="stat-label">识别准确率</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-number">8</span>
+                            <span class="stat-label">大需求分类</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-number">10000+</span>
+                            <span class="stat-label">标注样本</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="hero-visual">
+                    <div class="baby-icon">
+                        <i class="fas fa-child"></i>
+                    </div>
+                </div>
             </div>
-            <div class="hero-placeholder">
-                <div class="img-box">产品主视觉图</div>
-            </div>
-        </section>
+        </div>
+    </section>
 
-        <section class="features">
-            <h2>为什么选择 iiBaby？</h2>
-            <div class="feature-grid">
+    <!-- 产品功能 -->
+    <section class="features" id="features">
+        <div class="container">
+            <div class="section-title">
+                <h2>核心功能</h2>
+                <p>全方位守护宝宝健康成长</p>
+            </div>
+            
+            <div class="features-grid">
                 <div class="feature-card">
-                    <div class="icon">🎯</div>
-                    <h3>精准识别</h3>
-                    <p>识别准确率 > 95%，远超通用语音方案。可区分“饥饿”、“困倦”、“胀气疼痛”等细微差异。</p>
+                    <div class="feature-icon">
+                        <i class="fas fa-microphone-alt"></i>
+                    </div>
+                    <h3>智能哭声识别</h3>
+                    <p>实时分析哭声特征，秒级识别宝宝需求，准确率高达95%以上</p>
                 </div>
+                
                 <div class="feature-card">
-                    <div class="icon">🧠</div>
-                    <h3>临床级潜力</h3>
-                    <p>哭声特征分析为自闭症(ASD)早期筛查提供全新数字化途径，筛查准确率已达90.28%。</p>
+                    <div class="feature-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h3>成长数据追踪</h3>
+                    <p>记录哭闹频率、时长与模式，生成可视化成长健康报告</p>
                 </div>
+                
                 <div class="feature-card">
-                    <div class="icon">🔒</div>
-                    <h3>隐私安全</h3>
-                    <p>采用“端-边-云”架构，原始哭声数据本地处理，AES-256加密，通过等保2.0备案。</p>
+                    <div class="feature-icon">
+                        <i class="fas fa-hand-holding-heart"></i>
+                    </div>
+                    <h3>个性化安抚建议</h3>
+                    <p>基于宝宝状态智能推荐安抚方案，提供专业育儿指导</p>
                 </div>
+                
                 <div class="feature-card">
-                    <div class="icon">📈</div>
-                    <h3>成长记录</h3>
-                    <p>自动生成宝宝哭声、睡眠、活动日记，形成可视化成长报告，助力科学育儿。</p>
+                    <div class="feature-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <h3>家庭共享</h3>
+                    <p>支持多成员同时查看，确保家人育儿标准一致</p>
                 </div>
             </div>
-        </section>
+        </div>
+    </section>
 
-        <section class="demo">
-            <h2>技术体验</h2>
-            <p>点击下方按钮，模拟体验一次AI哭声分析过程。</p>
-            <div class="demo-box">
-                <button id="crySimulateBtn">模拟宝宝哭声（点击分析）</button>
-                <div id="analysisResult">
-                    <p>分析结果将显示在这里...</p>
+    <!-- 8大需求 -->
+    <section class="needs-section" id="needs">
+        <div class="container">
+            <div class="section-title">
+                <h2>精准识别8大需求</h2>
+                <p>覆盖宝宝日常核心需求场景</p>
+            </div>
+            
+            <div class="needs-grid">
+                <div class="need-item">
+                    <div class="need-icon">
+                        <i class="fas fa-utensils"></i>
+                    </div>
+                    <div class="need-content">
+                        <h4>饥饿需求</h4>
+                        <p>识别特定饥饿哭声模式</p>
+                    </div>
+                </div>
+                
+                <div class="need-item">
+                    <div class="need-icon">
+                        <i class="fas fa-bed"></i>
+                    </div>
+                    <div class="need-content">
+                        <h4>困倦疲劳</h4>
+                        <p>检测疲劳哭闹信号</p>
+                    </div>
+                </div>
+                
+                <div class="need-item">
+                    <div class="need-icon">
+                        <i class="fas fa-tint"></i>
+                    </div>
+                    <div class="need-content">
+                        <h4>尿布不适</h4>
+                        <p>识别不适烦躁哭声</p>
+                    </div>
+                </div>
+                
+                <div class="need-item">
+                    <div class="need-icon">
+                        <i class="fas fa-wind"></i>
+                    </div>
+                    <div class="need-content">
+                        <h4>胀气腹痛</h4>
+                        <p>判断腹部不适特征</p>
+                    </div>
+                </div>
+                
+                <div class="need-item">
+                    <div class="need-icon">
+                        <i class="fas fa-thermometer-half"></i>
+                    </div>
+                    <div class="need-content">
+                        <h4>温度不适</h4>
+                        <p>感知过冷过热哭闹</p>
+                    </div>
+                </div>
+                
+                <div class="need-item">
+                    <div class="need-icon">
+                        <i class="fas fa-hands-helping"></i>
+                    </div>
+                    <div class="need-content">
+                        <h4>需要关注</h4>
+                        <p>识别寻求安抚哭声</p>
+                    </div>
+                </div>
+                
+                <div class="need-item">
+                    <div class="need-icon">
+                        <i class="fas fa-tooth"></i>
+                    </div>
+                    <div class="need-content">
+                        <h4>出牙疼痛</h4>
+                        <p>检测疼痛特征哭声</p>
+                    </div>
+                </div>
+                
+                <div class="need-item">
+                    <div class="need-icon">
+                        <i class="fas fa-heartbeat"></i>
+                    </div>
+                    <div class="need-content">
+                        <h4>生病不适</h4>
+                        <p>预警异常健康状态</p>
+                    </div>
                 </div>
             </div>
-        </section>
-    </main>
+        </div>
+    </section>
 
+    <!-- 技术体验 -->
+    <section class="tech-demo-section" id="tech-demo">
+        <div class="container">
+            <div class="section-title">
+                <h2>技术体验</h2>
+                <p>模拟AI哭声分析过程</p>
+            </div>
+            
+            <div class="tech-demo-container">
+                <div class="demo-title">
+                    <i class="fas fa-robot"></i>
+                    AI哭声分析模拟
+                </div>
+                <p class="demo-subtitle">点击下方按钮，模拟体验一次AI哭声分析过程</p>
+                
+                <button class="record-btn" id="recordBtn">
+                    <i class="fas fa-microphone"></i>
+                    模拟录制宝宝哭声
+                </button>
+                
+                <div class="demo-result" id="demoResult">
+                    <div class="result-header">
+                        <i class="fas fa-check-circle"></i>
+                        分析完成！
+                    </div>
+                    
+                    <div class="result-item">
+                        <div class="result-label">
+                            <i class="fas fa-heart"></i>
+                            识别情绪
+                        </div>
+                        <div class="result-value">困倦</div>
+                    </div>
+                    
+                    <div class="result-item">
+                        <div class="result-label">
+                            <i class="fas fa-chart-bar"></i>
+                            AI置信度
+                        </div>
+                        <div class="result-value">88%</div>
+                        <div class="confidence-bar">
+                            <div class="confidence-fill" id="confidenceBar"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="result-item">
+                        <div class="result-label">
+                            <i class="fas fa-comment-alt"></i>
+                            特征描述
+                        </div>
+                        <div class="result-value">哭声呈鸣咽状，音调较低，可能伴随揉眼睛、打哈欠</div>
+                    </div>
+                    
+                    <div class="result-item">
+                        <div class="result-label">
+                            <i class="fas fa-hands-helping"></i>
+                            护理建议
+                        </div>
+                        <div class="result-value">建议：营造安静、昏暗的睡眠环境，轻柔安抚</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 核心技术 -->
+    <section class="core-tech" id="core-tech">
+        <div class="container">
+            <div class="section-title">
+                <h2>核心技术壁垒</h2>
+                <p>AI哭声语义识别 + 多模态融合监测</p>
+            </div>
+            
+            <div class="tech-stack">
+                <div class="tech-card">
+                    <h3><i class="fas fa-brain"></i> AI哭声语义识别</h3>
+                    <p>基于超10000条标注样本训练的深度学习模型，精准分辨饥饿、疼痛等8类宝宝需求，识别准确率达95%以上。</p>
+                    <ul class="tech-features">
+                        <li><i class="fas fa-check"></i> 超10000条专业标注样本训练</li>
+                        <li><i class="fas fa-check"></i> 95%以上识别准确率</li>
+                        <li><i class="fas fa-check"></i> 8类核心需求精准分类</li>
+                        <li><i class="fas fa-check"></i> 实时响应，＜2秒完成分析</li>
+                    </ul>
+                </div>
+                
+                <div class="tech-card">
+                    <h3><i class="fas fa-satellite-dish"></i> 多模态融合监测</h3>
+                    <p>融合4麦克风阵列+60GHz毫米波雷达，既能过滤环境噪音，又能非接触监测呼吸和肢体动作，交叉验证减少误判。</p>
+                    <ul class="tech-features">
+                        <li><i class="fas fa-check"></i> 4麦克风阵列定向收音</li>
+                        <li><i class="fas fa-check"></i> 60GHz毫米波雷达监测</li>
+                        <li><i class="fas fa-check"></i> 非接触式呼吸监测</li>
+                        <li><i class="fas fa-check"></i> 多源数据交叉验证</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="tech-architecture">
+                <h3 style="color: var(--tech-blue); margin-bottom: 20px; font-size: 1.8rem;">
+                    <i class="fas fa-network-wired"></i> "端-边-云"三层架构
+                </h3>
+                <p>核心功能本地独立运行，保障隐私与实时性；边缘计算处理复杂分析；云端协同实现持续学习与升级。</p>
+                
+                <div class="architecture-diagram">
+                    <div class="arch-step">
+                        <div class="arch-icon">
+                            <i class="fas fa-mobile-alt"></i>
+                        </div>
+                        <h4>端侧执行</h4>
+                        <p>本地独立运行<br>实时响应</p>
+                    </div>
+                    
+                    <div class="arch-step">
+                        <div class="arch-icon">
+                            <i class="fas fa-server"></i>
+                        </div>
+                        <h4>边缘计算</h4>
+                        <p>复杂分析处理<br>低延迟</p>
+                    </div>
+                    
+                    <div class="arch-step">
+                        <div class="arch-icon">
+                            <i class="fas fa-cloud"></i>
+                        </div>
+                        <h4>云端协同</h4>
+                        <p>持续学习升级<br>数据同步</p>
+                    </div>
+                </div>
+                
+                <div style="margin-top: 30px; padding: 20px; background: #f8f9fa; border-radius: 10px;">
+                    <h4 style="color: var(--pink-deep); margin-bottom: 10px;">技术优势对比</h4>
+                    <p>相比竞品单一音频监测方案，iibaby采用多模态融合+三层架构设计，具备更全面的监测能力、更强的抗干扰性，形成了核心技术壁垒。</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA区域 -->
+    <section class="cta-section">
+        <div class="container">
+            <h2>开启科学育儿新时代</h2>
+            <p>立即体验 iibaby，让AI成为您育儿路上的贴心助手。精准识别宝宝需求，减少育儿焦虑，享受更美好的亲子时光。</p>
+            <a href="#" class="btn cta-btn">立即下载体验</a>
+        </div>
+    </section>
+
+    <!-- 页脚 -->
     <footer>
-        <p>© 2025 iBaby 婴语翻译官项目组 | 挑战杯参赛项目 | 联系方式：contact@ibaby-tech.com</p>
-        <p class="footer-note">本页面为项目展示原型，产品功能以实际为准。</p>
+        <div class="container">
+            <div class="footer-content">
+                <div>
+                    <div class="footer-logo">
+                        <i class="fas fa-baby"></i>
+                        iibaby
+                    </div>
+                    <p style="color: #ddd; max-width: 300px;">基于AI技术的婴儿哭声特征识别与育儿辅助设备，让科技温暖每一个育儿瞬间。</p>
+                </div>
+                
+                <div>
+                    <h3>产品</h3>
+                    <div class="footer-links">
+                        <a href="#features">功能特点</a>
+                        <a href="#core-tech">技术原理</a>
+                        <a href="#tech-demo">技术体验</a>
+                        <a href="#">使用指南</a>
+                    </div>
+                </div>
+                
+                <div>
+                    <h3>关于</h3>
+                    <div class="footer-links">
+                        <a href="#">团队介绍</a>
+                        <a href="#">联系我们</a>
+                        <a href="#">用户协议</a>
+                        <a href="#">隐私政策</a>
+                    </div>
+                </div>
+                
+                <div>
+                    <h3>联系方式</h3>
+                    <div class="footer-links">
+                        <a href="#"><i class="fas fa-envelope" style="margin-right: 10px;"></i> contact@iibaby.com</a>
+                        <a href="#"><i class="fas fa-map-marker-alt" style="margin-right: 10px;"></i> 广东省清远市</a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="copyright">
+                <p>© 2026 iibaby 婴语翻译官项目组 | 挑战杯参赛项目</p>
+                <p class="disclaimer">本页面为项目展示原型，产品功能以实际为准。</p>
+            </div>
+        </div>
     </footer>
 
-    <script src="script.js"></script>
+    <script>
+        // 移动端菜单切换
+        document.querySelector('.mobile-menu').addEventListener('click', function() {
+            const navLinks = document.querySelector('.nav-links');
+            navLinks.style.display = navLinks.style.display === 'flex' ? 'none' : 'flex';
+        });
+        
+        // 滚动时导航栏效果
+        window.addEventListener('scroll', function() {
+            const header = document.querySelector('header');
+            if (window.scrollY > 100) {
+                header.style.background = 'rgba(255, 255, 255, 0.98)';
+                header.style.boxShadow = '0 5px 20px rgba(255, 158, 181, 0.2)';
+            } else {
+                header.style.background = 'rgba(255, 255, 255, 0.95)';
+                header.style.boxShadow = '0 5px 20px rgba(255, 158, 181, 0.1)';
+            }
+        });
+        
+        // 平滑滚动
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') return;
+                
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
+                    
+                    // 移动端点击后关闭菜单
+                    if (window.innerWidth < 768) {
+                        document.querySelector('.nav-links').style.display = 'none';
+                    }
+                }
+            });
+        });
+        
+        // 技术体验功能
+        const recordBtn = document.getElementById('recordBtn');
+        const demoResult = document.getElementById('demoResult');
+        const confidenceBar = document.getElementById('confidenceBar');
+        
+        recordBtn.addEventListener('click', function() {
+            // 开始录制状态
+            recordBtn.classList.add('recording');
+            recordBtn.innerHTML = '<i class="fas fa-circle"></i> 正在分析中...';
+            recordBtn.disabled = true;
+            
+            // 模拟分析过程
+            setTimeout(() => {
+                // 结束录制状态
+                recordBtn.classList.remove('recording');
+                recordBtn.innerHTML = '<i class="fas fa-microphone"></i> 重新模拟分析';
+                recordBtn.disabled = false;
+                
+                // 显示结果
+                demoResult.style.display = 'block';
+                
+                // 动画显示置信度条
+                setTimeout(() => {
+                    confidenceBar.style.width = '88%';
+                }, 100);
+                
+                // 滚动到结果区域
+                demoResult.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }, 3000); // 3秒模拟分析时间
+        });
+        
+        // 页面加载时初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            // 确保移动端菜单初始隐藏
+            if (window.innerWidth < 768) {
+                document.querySelector('.nav-links').style.display = 'none';
+            }
+        });
+    </script>
 </body>
 </html>
