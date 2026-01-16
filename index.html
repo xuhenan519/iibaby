@@ -369,7 +369,7 @@
         }
 
         .tech-demo-container {
-            max-width: 800px;
+            max-width: 900px;
             margin: 0 auto;
             background: var(--card-bg);
             border-radius: var(--radius);
@@ -380,8 +380,8 @@
 
         .demo-title {
             color: var(--pink-deep);
-            font-size: 2rem;
-            margin-bottom: 30px;
+            font-size: 2.2rem;
+            margin-bottom: 20px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -389,30 +389,32 @@
         }
 
         .demo-title i {
-            font-size: 2.2rem;
+            font-size: 2.5rem;
         }
 
         .demo-subtitle {
             color: var(--text-light);
             margin-bottom: 40px;
-            font-size: 1.1rem;
+            font-size: 1.2rem;
+            max-width: 600px;
+            margin: 0 auto 40px;
         }
 
         .record-btn {
             background: var(--pink-gradient);
             color: white;
             border: none;
-            padding: 18px 50px;
-            font-size: 1.3rem;
+            padding: 20px 60px;
+            font-size: 1.4rem;
             border-radius: 50px;
             cursor: pointer;
-            margin: 30px 0;
             transition: all 0.3s;
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 15px;
-            margin: 30px auto;
+            margin: 40px auto;
+            min-width: 300px;
         }
 
         .record-btn:hover {
@@ -451,33 +453,36 @@
         }
 
         .result-item {
-            margin-bottom: 20px;
-            padding-bottom: 20px;
+            margin-bottom: 25px;
+            padding-bottom: 25px;
             border-bottom: 1px solid #eee;
         }
 
         .result-label {
             font-weight: 600;
             color: var(--text-dark);
-            margin-bottom: 8px;
+            margin-bottom: 10px;
             display: flex;
             align-items: center;
             gap: 10px;
+            font-size: 1.1rem;
         }
 
         .result-label i {
             color: var(--tech-blue);
+            font-size: 1.2rem;
         }
 
         .result-value {
             color: var(--text-light);
             line-height: 1.6;
+            font-size: 1.05rem;
         }
 
         .confidence-bar {
-            height: 10px;
+            height: 12px;
             background: #e9ecef;
-            border-radius: 5px;
+            border-radius: 6px;
             margin-top: 10px;
             overflow: hidden;
         }
@@ -485,9 +490,20 @@
         .confidence-fill {
             height: 100%;
             background: var(--pink-gradient);
-            border-radius: 5px;
+            border-radius: 6px;
             width: 0%;
             transition: width 2s ease-in-out;
+        }
+
+        .emotion-badge {
+            display: inline-block;
+            background: var(--pink-light);
+            color: var(--pink-deep);
+            padding: 8px 20px;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            margin-left: 10px;
         }
 
         /* ===== 核心技术展示 ===== */
@@ -735,6 +751,12 @@
             .demo-title {
                 font-size: 1.7rem;
             }
+            
+            .record-btn {
+                padding: 18px 40px;
+                font-size: 1.2rem;
+                min-width: auto;
+            }
         }
     </style>
 </head>
@@ -946,7 +968,7 @@
                     <i class="fas fa-robot"></i>
                     AI哭声分析模拟
                 </div>
-                <p class="demo-subtitle">点击下方按钮，模拟体验一次AI哭声分析过程</p>
+                <p class="demo-subtitle">点击下方按钮，随机体验AI识别8种不同宝宝情绪与需求</p>
                 
                 <button class="record-btn" id="recordBtn">
                     <i class="fas fa-microphone"></i>
@@ -964,7 +986,10 @@
                             <i class="fas fa-heart"></i>
                             识别情绪
                         </div>
-                        <div class="result-value">困倦</div>
+                        <div class="result-value">
+                            正在分析中...
+                            <div class="emotion-badge" id="emotionBadge"></div>
+                        </div>
                     </div>
                     
                     <div class="result-item">
@@ -972,9 +997,11 @@
                             <i class="fas fa-chart-bar"></i>
                             AI置信度
                         </div>
-                        <div class="result-value">88%</div>
-                        <div class="confidence-bar">
-                            <div class="confidence-fill" id="confidenceBar"></div>
+                        <div class="result-value">
+                            <span id="confidenceText">0%</span>
+                            <div class="confidence-bar">
+                                <div class="confidence-fill" id="confidenceBar"></div>
+                            </div>
                         </div>
                     </div>
                     
@@ -983,7 +1010,7 @@
                             <i class="fas fa-comment-alt"></i>
                             特征描述
                         </div>
-                        <div class="result-value">哭声呈鸣咽状，音调较低，可能伴随揉眼睛、打哈欠</div>
+                        <div class="result-value" id="featureDescription">等待分析数据...</div>
                     </div>
                     
                     <div class="result-item">
@@ -991,7 +1018,7 @@
                             <i class="fas fa-hands-helping"></i>
                             护理建议
                         </div>
-                        <div class="result-value">建议：营造安静、昏暗的睡眠环境，轻柔安抚</div>
+                        <div class="result-value" id="careAdvice">分析完成后提供个性化建议</div>
                     </div>
                 </div>
             </div>
@@ -1168,16 +1195,76 @@
             });
         });
         
+        // 8种情绪的数据配置
+        const emotionData = [
+            {
+                emotion: "饥饿",
+                confidence: 92,
+                features: "哭声短促有力，呈波浪式上升，伴有吮吸动作或手指放入口中",
+                advice: "建议：立即喂奶，检查上次喂奶时间。喂奶前可先安抚，避免宝宝因饥饿过度而呛奶。"
+            },
+            {
+                emotion: "困倦",
+                confidence: 88,
+                features: "哭声呈鸣咽状，音调较低，节奏缓慢，可能伴随揉眼睛、打哈欠",
+                advice: "建议：营造安静、昏暗的睡眠环境，轻柔安抚，可尝试摇篮曲或白噪音辅助入眠。"
+            },
+            {
+                emotion: "不适",
+                confidence: 85,
+                features: "哭声尖锐刺耳，时断时续，身体扭动不安，可能因尿布湿或衣物不适",
+                advice: "建议：检查尿布是否干燥，衣物是否过紧或标签摩擦。保持环境舒适温度22-26℃。"
+            },
+            {
+                emotion: "胀气",
+                confidence: 90,
+                features: "哭声突然而尖锐，双腿向上蜷缩，腹部紧张，可能在喂奶后发生",
+                advice: "建议：竖抱轻拍背部帮助打嗝，顺时针按摩腹部，可尝试飞机抱缓解不适。"
+            },
+            {
+                emotion: "需要关注",
+                confidence: 78,
+                features: "哭声轻柔带有试探性，时哭时停，会观察周围是否有人回应",
+                advice: "建议：给予适当关注和拥抱，但避免过度响应以免形成依赖。可进行亲子互动游戏。"
+            },
+            {
+                emotion: "疼痛",
+                confidence: 95,
+                features: "哭声尖锐持久，音调高亢，伴有痛苦表情，身体僵硬或颤抖",
+                advice: "建议：立即检查有无受伤或异常，测量体温，必要时就医。出牙期可使用牙胶缓解。"
+            },
+            {
+                emotion: "过热",
+                confidence: 82,
+                features: "哭声烦躁不安，皮肤潮红出汗，呼吸稍快，手脚温热",
+                advice: "建议：减少衣物包裹，调整室温至22-24℃，保持通风，避免阳光直射。"
+            },
+            {
+                emotion: "惊吓",
+                confidence: 87,
+                features: "哭声突然爆发，音调极高，伴有惊跳反射，可能因突然声响或光线",
+                advice: "建议：立即拥抱安抚，轻声细语，提供安全感。避免突然的噪音和强光刺激。"
+            }
+        ];
+        
         // 技术体验功能
         const recordBtn = document.getElementById('recordBtn');
         const demoResult = document.getElementById('demoResult');
         const confidenceBar = document.getElementById('confidenceBar');
+        const confidenceText = document.getElementById('confidenceText');
+        const emotionBadge = document.getElementById('emotionBadge');
+        const featureDescription = document.getElementById('featureDescription');
+        const careAdvice = document.getElementById('careAdvice');
         
         recordBtn.addEventListener('click', function() {
             // 开始录制状态
             recordBtn.classList.add('recording');
             recordBtn.innerHTML = '<i class="fas fa-circle"></i> 正在分析中...';
             recordBtn.disabled = true;
+            
+            // 随机选择一种情绪
+            const randomIndex = Math.floor(Math.random() * emotionData.length);
+            const selectedEmotion = emotionData[randomIndex];
             
             // 模拟分析过程
             setTimeout(() => {
@@ -1189,14 +1276,20 @@
                 // 显示结果
                 demoResult.style.display = 'block';
                 
+                // 更新结果显示
+                emotionBadge.textContent = selectedEmotion.emotion;
+                confidenceText.textContent = selectedEmotion.confidence + '%';
+                featureDescription.textContent = selectedEmotion.features;
+                careAdvice.textContent = selectedEmotion.advice;
+                
                 // 动画显示置信度条
                 setTimeout(() => {
-                    confidenceBar.style.width = '88%';
+                    confidenceBar.style.width = selectedEmotion.confidence + '%';
                 }, 100);
                 
                 // 滚动到结果区域
                 demoResult.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            }, 3000); // 3秒模拟分析时间
+            }, 2000); // 2秒模拟分析时间
         });
         
         // 页面加载时初始化
@@ -1205,6 +1298,11 @@
             if (window.innerWidth < 768) {
                 document.querySelector('.nav-links').style.display = 'none';
             }
+            
+            // 默认显示一个随机结果（可选）
+            const defaultIndex = Math.floor(Math.random() * emotionData.length);
+            const defaultEmotion = emotionData[defaultIndex];
+            emotionBadge.textContent = defaultEmotion.emotion;
         });
     </script>
 </body>
